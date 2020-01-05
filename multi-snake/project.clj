@@ -11,6 +11,7 @@
                  [ring "1.8.0"]
                  [ring/ring-defaults "0.3.2"]
                  [hiccup "1.0.5"]
+                 [metosin/reitit "0.3.7"]
                  [yogthos/config "1.1.6"]
                  [org.clojure/clojurescript "1.10.597"
                   :scope "provided"]]
