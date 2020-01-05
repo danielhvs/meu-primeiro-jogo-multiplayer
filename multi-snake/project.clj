@@ -80,6 +80,7 @@
                    :dependencies [[cider/piggieback "0.4.2"]
                                   [binaryage/devtools "0.9.11"]
                                   [ring/ring-mock "0.4.0"]
+                                  [com.taoensso/sente "1.14.0-RC2"]
                                   [ring/ring-devel "1.8.0"]
                                   [prone "2019-07-08"]
                                   [figwheel-sidecar "0.5.19"]
