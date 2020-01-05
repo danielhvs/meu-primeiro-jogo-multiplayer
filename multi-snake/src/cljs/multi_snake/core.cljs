@@ -1,7 +1,6 @@
 (ns multi-snake.core
   (:require
-   [reagent.core :as reagent :refer [atom]]
-))
+   [reagent.core :as reagent :refer [atom]]))
 
 (def app-state (atom 
                 {:current-player "player1"
