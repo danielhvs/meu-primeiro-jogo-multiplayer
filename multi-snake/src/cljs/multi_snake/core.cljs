@@ -12,7 +12,7 @@
   [:rect
    {:width tam-elemento
     :height tam-elemento
-    :fill "yelllow"
+    :fill "yellow"
     :x (* tam-elemento x)
     :y (* tam-elemento y)}])
 
