@@ -22,6 +22,7 @@
   (html5
    (head)
    [:body {:class "body-container"}
+    [:canvas {:id "screen" :width "30" :height "30"}]
     mount-target
     (include-js "/js/app.js")]))
 
