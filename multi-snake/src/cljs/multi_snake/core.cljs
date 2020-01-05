@@ -35,11 +35,13 @@
              (map player-pos @app-state))]]]))
 
 (defn moves [chave]
-  (chave
-   {:ArrowLeft (fn [e] (assoc e :x (dec (:x e))))
-    :ArrowRight (fn [e] (assoc e :x (inc (:x e))))
-    :ArrowDown (fn [e] (assoc e :y (inc (:y e))))
-    :ArrowUp (fn [e] (assoc e :y (dec (:y e))))}))
+  (or 
+   (chave
+    {:ArrowLeft (fn [e] (assoc e :x (dec (:x e))))
+     :ArrowRight (fn [e] (assoc e :x (inc (:x e))))
+     :ArrowDown (fn [e] (assoc e :y (inc (:y e))))
+     :ArrowUp (fn [e] (assoc e :y (dec (:y e))))})
+   (fn [e] e)))
 
 (defn key-pressed [key]
   (println (str "APP-STATE:" @app-state))
