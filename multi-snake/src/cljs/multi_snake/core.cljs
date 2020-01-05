@@ -3,7 +3,7 @@
    [reagent.core :as reagent :refer [atom]]
 ))
 
-(defonce app-state (atom {:size 40}))
+(def app-state (atom [{:playerId "player1" :x 1 :y 1}]))
 
 (def tam-tela 500)
 (def tam-elemento (/ tam-tela 10))
@@ -16,10 +16,13 @@
     :x (* tam-elemento x)
     :y (* tam-elemento y)}])
 
+(defn player-pos [p]
+  (blank (:x p) (:y p)))
+
 (defn home-page []  
   (fn []
     [:div
-     #_[:div
+     [:div
       [:center
        (into [:svg {:width tam-tela :height tam-tela}
               [:rect {:width tam-tela
@@ -28,9 +31,20 @@
                               :stroke-width "3"
                               :stroke "rgb(0,0,0)" }
                       :x 0
-                      :y 0}]
-              (blank 0 0)]
-             #_(map blank (:scenario @app-state)))]]]))
+                      :y 0}]]
+             (map player-pos @app-state))]]]))
+
+(defn moves [chave]
+  (chave
+   {:ArrowLeft (fn [e] (assoc e :x (dec (:x e))))
+    :ArrowRight (fn [e] (assoc e :x (inc (:x e))))
+    :ArrowDown (fn [e] (assoc e :y (inc (:y e))))
+    :ArrowUp (fn [e] (assoc e :y (dec (:y e))))}))
+
+(defn key-pressed [key]
+  (println (str "APP-STATE:" @app-state))
+  (println key)
+  (swap! app-state #(map (moves (keyword key)) %)))
 
 ;; -------------------------
 ;; Initialize app
@@ -39,34 +53,9 @@
                   (.getElementById js/document "app")))
 
 (defn init! []
-  (mount-root))
+  (mount-root)
+  (.addEventListener js/document "keydown"
+                     (fn [event] (key-pressed (.-key event)))))
 
-(mount-root)
-
-(defn get-canvas-context-from-id
-  "Gets the drawing context from the id of the canvas element.
-   Actual context is in a map with the canvas element and some
-   other info."
-  [id]
-  (let [canvas (.getElementById js/document id)]
-    {:canvas canvas
-     :width (.-width canvas)
-     :height (.-height canvas)
-     :ctx (.getContext canvas "2d")}))
-
-(defn render-game []
-  (.requestAnimationFrame js/window render-game)
-  (let [context (:ctx (get-canvas-context-from-id "screen"))
-        ]
-    (set! (.-globalAlpha  context) 1)
-    #_(.clearRect context 0 0 800 800)
-    (set! (.-fillStyle  context) "#000000")
-    (set! (.-globalAlpha  context) 0.2)
-    (.fillRect context 20 20 10 10)
-))
-
-(render-game)
-
-
-
-
+; dev
+(mount-root) 
