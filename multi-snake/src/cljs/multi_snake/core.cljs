@@ -3,7 +3,12 @@
    [reagent.core :as reagent :refer [atom]]
 ))
 
-(def app-state (atom [{:playerId "player1" :x 1 :y 1}]))
+(def app-state (atom 
+                {:current-player "player1"
+                 :players [
+                           {:playerId "player1" :x 1 :y 1}
+                           {:playerId "player2" :x 2 :y 3}
+                           {:playerId "player3" :x 3 :y 4}]}))
 
 (def tam-tela 500)
 (def tam-elemento (/ tam-tela 10))
@@ -32,7 +37,7 @@
                               :stroke "rgb(0,0,0)" }
                       :x 0
                       :y 0}]]
-             (map player-pos @app-state))]]]))
+             (map player-pos (:players @app-state)))]]]))
 
 (defn moves [chave]
   (or 
@@ -44,9 +49,17 @@
    (fn [e] e)))
 
 (defn key-pressed [key]
+  (let [
+        players (:players @app-state)
+        current (first (filter #(= (:current-player @app-state) (:playerId %)) players))
+]
+    (swap! app-state assoc :players 
+           (into
+            [((moves (keyword key)) current)]
+            (remove #(= current %)) players)))
   (println (str "APP-STATE:" @app-state))
   (println key)
-  (swap! app-state #(map (moves (keyword key)) %)))
+)
 
 ;; -------------------------
 ;; Initialize app
