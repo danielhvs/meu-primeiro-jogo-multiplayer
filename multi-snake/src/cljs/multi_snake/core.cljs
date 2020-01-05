@@ -3,32 +3,34 @@
    [reagent.core :as reagent :refer [atom]]
 ))
 
-(def scenario1
-  [{:x 0 :y 0} {:x 1 :y 1} {:x 0 :y 1} {:x 1 :y 0}])
+(defonce app-state (atom {:size 40}))
 
-(defonce app-state (atom {:size 40 :scenario scenario1}))
+(def tam-tela 500)
+(def tam-elemento (/ tam-tela 10))
 
-(defn blank [p]
+(defn blank [x y]
   [:rect
-   {:width 0.95
-    :height 0.95
-    :fill "green"
-    :x (+ 0.05 (:x p))
-    :y (+ 0.05 (:y p))}])
+   {:width tam-elemento
+    :height tam-elemento
+    :fill "yelllow"
+    :x (* tam-elemento x)
+    :y (* tam-elemento y)}])
 
 (defn home-page []  
-  [:div
-   [:div
-    [:center
-     (let [width 2
-           height 2
-           ]
-       (into [:svg
-              {:view-box (str "0 0 " width " " height)
-               :width (* (:size @app-state) width)
-               :preserveAspectRatio "xMinYMin meet"
-               :height (* (:size @app-state) height)}]
-             (map blank (:scenario @app-state))))]]])
+  (fn []
+    [:div
+     [:div
+      [:center
+       (into [:svg {:width tam-tela :height tam-tela}
+              [:rect {:width tam-tela
+                      :height tam-tela
+                      :style {:fill "rgb(255,255,255)"
+                              :stroke-width "3"
+                              :stroke "rgb(0,0,0)" }
+                      :x 0
+                      :y 0}]
+              (blank 0 0)]
+             #_(map blank (:scenario @app-state)))]]]))
 
 ;; -------------------------
 ;; Initialize app
