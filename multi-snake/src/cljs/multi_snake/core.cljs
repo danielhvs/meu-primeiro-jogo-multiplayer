@@ -13,16 +13,18 @@
 (def tam-tela 500)
 (def tam-elemento (/ tam-tela 10))
 
-(defn blank [x y]
+(defn blank [x y color]
   [:rect
    {:width tam-elemento
     :height tam-elemento
-    :fill "yellow"
+    :fill color
     :x (* tam-elemento x)
     :y (* tam-elemento y)}])
 
-(defn player-pos [p]
-  (blank (:x p) (:y p)))
+(defn player-pos [player]
+  (blank (:x player) (:y player) (if (= (:current-player @app-state) (:playerId player)) 
+                                    "yellow"
+                                    "gray")))
 
 (defn home-page []  
   (fn []
@@ -49,17 +51,14 @@
    (fn [e] e)))
 
 (defn key-pressed [key]
-  (let [
-        players (:players @app-state)
-        current (first (filter #(= (:current-player @app-state) (:playerId %)) players))
-]
+  (let [players (:players @app-state)
+        current (first (filter #(= (:current-player @app-state) (:playerId %)) players))]
     (swap! app-state assoc :players 
            (into
             [((moves (keyword key)) current)]
             (remove #(= current %)) players)))
   (println (str "APP-STATE:" @app-state))
-  (println key)
-)
+  (println key))
 
 ;; -------------------------
 ;; Initialize app
