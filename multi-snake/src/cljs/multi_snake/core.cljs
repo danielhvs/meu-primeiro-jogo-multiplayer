@@ -50,8 +50,14 @@
                                :stroke "rgb(0,0,0)" }
                        :x 0
                        :y 0}]]
-              (map player-pos (:players @app-state)))
-        (map fruit-pos (:fruits @app-state)))]]]))
+              (map fruit-pos (:fruits @app-state)))
+        (map player-pos (:players @app-state)))]]]))
+
+
+
+(defn collides? [fruit player]
+  (and (= (:y player) (:y fruit))
+       (= (:x player) (:x fruit))))
 
 (defn moves [chave]
   (or 
@@ -64,7 +70,11 @@
 
 (defn key-pressed [key]
   (let [players (:players @app-state)
+        fruits (:fruits @app-state)
         current (first (filter #(= (:current-player @app-state) (:playerId %)) players))]
+    (swap! app-state assoc :fruits 
+           (into [] 
+                 (remove #(collides? % current) fruits)))
     (swap! app-state assoc :players 
            (into
             [((moves (keyword key)) current)]
