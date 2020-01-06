@@ -2,12 +2,15 @@
   (:require
    [reagent.core :as reagent :refer [atom]]))
 
-(def app-state (atom 
-                {:current-player "player1"
+(defonce app-state (atom 
+                {:current-player "player2"
                  :players [
                            {:playerId "player1" :x 1 :y 1}
                            {:playerId "player2" :x 2 :y 3}
                            {:playerId "player3" :x 3 :y 4}]}))
+
+; dev
+(swap! app-state assoc :current-player "player2")
 
 (def tam-tela 500)
 (def tam-elemento (/ tam-tela 10))
