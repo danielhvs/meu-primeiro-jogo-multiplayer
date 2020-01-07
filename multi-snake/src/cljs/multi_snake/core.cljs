@@ -76,8 +76,7 @@
            (into
             [((moves (keyword key)) current)]
             (remove #(= current %)) players)))
-  (println (str "APP-STATE:" @app-state))
-  (println key))
+  (println (str "APP-STATE:" @app-state)))
 
 ;; -------------------------
 ;; Initialize app
@@ -96,7 +95,6 @@
 (defn new-fruit []
   (let [rand-x (rand-int qtd-elementos) 
         rand-y (rand-int qtd-elementos)]
-    (println (str "new-fruit " rand-x " " rand-y))
     (swap! app-state assoc :fruits (conj (:fruits @app-state)
                                          {:x rand-x :y rand-y}))
     (js/setTimeout #(new-fruit) 2000)))
