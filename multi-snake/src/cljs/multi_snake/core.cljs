@@ -4,11 +4,7 @@
 
 (defonce app-state (atom 
                 {:current-player "player1"
-                 :fruits [
-                          {:x 1 :y 2}
-                          {:x 6 :y 2}
-                          {:x 3 :y 3}
-                          {:x 5 :y 6}]
+                 :fruits []
                  :players [
                            {:playerId "player1" :x 1 :y 1}
                            {:playerId "player2" :x 2 :y 3}
@@ -17,8 +13,9 @@
 ; dev
 (swap! app-state assoc :current-player "player1")
 
+(def qtd-elementos 10)
 (def tam-tela 500)
-(def tam-elemento (/ tam-tela 10))
+(def tam-elemento (/ tam-tela qtd-elementos))
 
 (defn blank [x y color]
   [:rect
@@ -94,4 +91,14 @@
                      (fn [event] (key-pressed (.-key event)))))
 
 ; dev
-(mount-root) 
+(mount-root)  
+
+(defn new-fruit []
+  (let [rand-x (rand-int qtd-elementos) 
+        rand-y (rand-int qtd-elementos)]
+    (println (str "new-fruit " rand-x " " rand-y))
+    (swap! app-state assoc :fruits (conj (:fruits @app-state)
+                                         {:x rand-x :y rand-y}))
+    (js/setTimeout #(new-fruit) 2000)))
+
+(js/setTimeout #(new-fruit) 2000) 
