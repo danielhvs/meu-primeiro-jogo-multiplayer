@@ -59,22 +59,23 @@
 (defn moves [chave]
   (or 
    (chave
-    {:ArrowLeft (fn [e] (assoc e :x (dec (:x e))))
-     :ArrowRight (fn [e] (assoc e :x (inc (:x e))))
-     :ArrowDown (fn [e] (assoc e :y (inc (:y e))))
-     :ArrowUp (fn [e] (assoc e :y (dec (:y e))))})
+    {:ArrowLeft (fn [e] (assoc e :x (max 0 (dec (:x e)))))
+     :ArrowRight (fn [e] (assoc e :x (min (dec qtd-elementos) (inc (:x e)))))
+     :ArrowDown (fn [e] (assoc e :y (min (dec qtd-elementos) (inc (:y e)))))
+     :ArrowUp (fn [e] (assoc e :y (max 0 (dec (:y e)))))})
    (fn [e] e)))
 
 (defn key-pressed [key]
   (let [players (:players @app-state)
         fruits (:fruits @app-state)
-        current (first (filter #(= (:current-player @app-state) (:playerId %)) players))]
+        current (first (filter #(= (:current-player @app-state) (:playerId %)) players))
+        next-pos ((moves (keyword key)) current)]
     (swap! app-state assoc :fruits 
            (into [] 
                  (remove #(collides? % current) fruits)))
     (swap! app-state assoc :players 
            (into
-            [((moves (keyword key)) current)]
+            [next-pos]
             (remove #(= current %)) players)))
   (println (str "APP-STATE:" @app-state)))
 
