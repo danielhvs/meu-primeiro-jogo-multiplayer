@@ -19,11 +19,11 @@
 
 (defn blank [x y color]
   [:rect
-   {:width tam-elemento
-    :height tam-elemento
+   {:width (- (* .90 tam-elemento) (/ tam-elemento 10))
+    :height (- (* .90 tam-elemento) (/ tam-elemento 10))
     :fill color
-    :x (* tam-elemento x)
-    :y (* tam-elemento y)}])
+    :x (+ (/ tam-elemento 10) (* tam-elemento x))
+    :y (+ (/ tam-elemento 10) (* tam-elemento y))}])
 
 (defn fruit-pos [fruit]
   (blank (:x fruit) (:y fruit) "red"))
@@ -33,6 +33,15 @@
                                     "yellow"
                                     "gray")))
 
+(defn border []
+  [:rect {:width tam-tela
+          :height tam-tela
+          :style {:fill "rgb(255,255,255)"
+                  :stroke-width "3"
+                  :stroke "rgb(0,0,0)" }
+          :x 0
+          :y 0}])
+
 (defn home-page []  
   (fn []
     [:div
@@ -40,16 +49,9 @@
       [:center
        (into
         (into [:svg {:width tam-tela :height tam-tela}
-               [:rect {:width tam-tela
-                       :height tam-tela
-                       :style {:fill "rgb(255,255,255)"
-                               :stroke-width "3"
-                               :stroke "rgb(0,0,0)" }
-                       :x 0
-                       :y 0}]]
+               (border)]
               (map fruit-pos (:fruits @app-state)))
         (map player-pos (:players @app-state)))]]]))
-
 
 
 (defn collides? [fruit player]
